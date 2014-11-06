@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Blaubot by Blaubot</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Blaubot</h1>
+        <h2>The Blaubot Library</h2>
+        <a href="https://github.com/Blaubot/Blaubot" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="blaubot" class="anchor" href="#blaubot" aria-hidden="true"><span class="octicon octicon-link"></span></a>Blaubot</h1>
+
+<p>Blaubot is a lightweight framework to form small networks via P2P connections such as Bluetooth-RFCOMM, Adhoc-WiFi or simple socket connections.
+Blaubot takes care of device discovery and connection establishment with the goal to minimize a developer's boilerplate code to set up these small networks.</p>
+
+<p>Tl;dr our main goal is to let a developer call start(); and spare him as much hassle as possible to create ad hoc networks.</p>
+
+<h1>
+<a id="requirements-android" class="anchor" href="#requirements-android" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements Android</h1>
+
+<p>Android 4.0.3 or higher</p>
+
+<h1>
+<a id="general-usage" class="anchor" href="#general-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>General Usage</h1>
+
+<p>1) Obtain a Blaubot instance from a BlaubotFactory</p>
+
+<div class="highlight highlight-java"><pre><span class="c1">// Generate a UUID that is unique for your application</span>
+<span class="c1">// see http://www.famkruithof.net/uuid/uuidgen</span>
+<span class="k">final</span> <span class="kt">UUID</span> <span class="no">APP_UUID</span> <span class="o">=</span> <span class="no">UUID</span><span class="o">.</span>fromString(<span class="s2">"ec127529-2e9c-4046-a5a5-144feb30465f"</span>); 
+<span class="kt">Blaubot</span> blaubot <span class="o">=</span> <span class="kt">BlaubotAndroidFactory</span><span class="o">.</span>createEthernetBlaubot(<span class="no">APP_UUID</span>);</pre></div>
+
+<p>2) (optional) Register a ILifecycleListener to the Blaubot instance</p>
+
+<div class="highlight highlight-java"><pre>blaubot<span class="o">.</span>addLifecycleListener(<span class="k">new</span> <span class="kt">ILifecycleListener</span>() {
+
+    <span class="kt">@Override</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onPrinceDeviceChanged</span>(<span class="kt">IBlaubotDevice</span> <span class="nv">oldPrince</span>, <span class="kt">IBlaubotDevice</span> <span class="nv">newPrince</span>) {
+        <span class="c1">// if the network's king goes down, the prince will rule over the remaining peasants</span>
+    }
+
+    <span class="kt">@Override</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onDisconnected</span>() {
+        <span class="c1">// THIS device disconnected from the network</span>
+    }
+
+    <span class="kt">@Override</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onDeviceLeft</span>(<span class="kt">IBlaubotDevice</span> <span class="nv">blaubotDevice</span>) {
+      <span class="c1">// ANOTHER device disconnected from the network</span>
+    }
+
+    <span class="kt">@Override</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onDeviceJoined</span>(<span class="kt">IBlaubotDevice</span> <span class="nv">blaubotDevice</span>) {
+      <span class="c1">// ANOTHER device connected to the network THIS device is on</span>
+    }
+
+    <span class="kt">@Override</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onConnected</span>() {
+      <span class="c1">// THIS device connected to a network</span>
+      <span class="c1">// onDeviceJoined(...) calls will follow for each OTHER device that was already connected</span>
+    }
+
+});</pre></div>
+
+<p>3) Start Blaubot</p>
+
+<div class="highlight highlight-java"><pre>blaubot<span class="o">.</span>startBlaubot();</pre></div>
+
+<p>4) Create a Channel </p>
+
+<div class="highlight highlight-java"><pre><span class="k">final</span> <span class="kt">short</span> channelId <span class="o">=</span> (<span class="kt">short</span>) <span class="m">1</span>;
+<span class="k">final</span> <span class="kt">IChannel</span> channel <span class="o">=</span> blaubot<span class="o">.</span>createChannel(channelId);</pre></div>
+
+<p>4.1) Send messages to all subscribers of this channel</p>
+
+<div class="highlight highlight-java"><pre>channel<span class="o">.</span>post(<span class="s2">"Hello world!"</span><span class="o">.</span>getBytes(<span class="kt">Charset</span><span class="o">.</span>forName(<span class="s2">"UTF-8"</span>)));</pre></div>
+
+<p>4.2) Subscribe to the channel via channel.subsribe() to receive messages</p>
+
+<div class="highlight highlight-java"><pre>channel<span class="o">.</span>subscribe(<span class="k">new</span> <span class="kt">IMessageListener</span>() {
+
+    <span class="kt">@Override</span>
+    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onMessage</span>(<span class="kt">BlaubotMessage</span> <span class="nv">message</span>) {
+        <span class="c1">// we got a message - our payload is a byte array</span>
+        <span class="c1">// deserialize</span>
+        <span class="kt">String</span> msg <span class="o">=</span> <span class="k">new</span> <span class="kt">String</span>(message<span class="o">.</span>getPayload(), <span class="kt">Charset</span><span class="o">.</span>forName(<span class="s2">"UTF-8"</span>));
+        <span class="c1">// .. do something useful ..</span>
+    }
+
+});</pre></div>
+
+<p>If you registered the listener in step 2, you will be informed if your own device or other devices join or leave a network.</p>
+
+<h1>
+<a id="quickstart-java" class="anchor" href="#quickstart-java" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Java</h1>
+
+<ol>
+<li>Get the General-JAR and add it to your project's dependencies.</li>
+<li>Create a Blaubot instance using de.hsrm.blaubot.core.BlaubotFactory</li>
+</ol>
+
+<p>You can choose between a fixed set of devices to form net Blaubot network or to dynamically search and discover nearby running Blaubot instances via multicast from the Factory's methods. 
+If your targeted environment supports multicasts, this should be the easiest option for you to get your app working.</p>
+
+<h1>
+<a id="quickstart-android" class="anchor" href="#quickstart-android" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart Android</h1>
+
+<ol>
+<li>Get the Android-JAR and add it to your project's dependencies.</li>
+<li>Create a Blaubot instance using de.hsrm.blaubot.android.BlaubotFactory</li>
+</ol>
+
+<p>On Android you can rely on the standard ethernet-based Blaubot options provided (see Quickstart Java) but you can also use the Bluetooth enabled Blaubot.
+Please note that you have to use a different Factory to create Blaubot instances optimized for the Android platform.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/Blaubot/Blaubot/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/Blaubot/Blaubot/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/Blaubot/Blaubot"></a> is maintained by <a href="https://github.com/Blaubot">Blaubot</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
