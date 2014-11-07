@@ -120,6 +120,12 @@ Blaubot takes care of device discovery and connection establishment with the goa
 <li>Create a Blaubot instance using de.hsrm.blaubot.core.BlaubotFactory</li>
 </ol>
 
+<div class="highlight highlight-java"><pre><span class="c1">// creates a Blaubot instance with a multicast beacon on the first found local interface</span>
+<span class="kt">de.hsrm.blaubot.core<span class="o">.</span>BlabotFactory</span><span class="o">.</span>createEthernetBlaubot(<span class="no">APP_UUID</span>);
+
+<span class="c1">// or create a Blaubot instance without multicast searching for a fixed set of devices by their ip addresses</span>
+<span class="kt">de.hsrm.blaubot.core<span class="o">.</span>BlaubotFactory</span><span class="o">.</span>createEthernetBlaubotWithFixedDevices(<span class="m">...</span>);</pre></div>
+
 <p>You can choose between a fixed set of devices to form net Blaubot network or to dynamically search and discover nearby running Blaubot instances via multicast from the Factory's methods. 
 If your targeted environment supports multicasts, this should be the easiest option for you to get your app working.</p>
 
@@ -130,6 +136,12 @@ If your targeted environment supports multicasts, this should be the easiest opt
 <li>Get the Android-JAR and add it to your project's dependencies.</li>
 <li>Create a Blaubot instance using de.hsrm.blaubot.android.BlaubotFactory</li>
 </ol>
+
+<div class="highlight highlight-java"><pre><span class="c1">// you can use the same ethernet based isntances as for java but additionally:</span>
+
+<span class="c1">// creates a Blaubot instance using Android's Bluetooth API</span>
+<span class="kt">de.hsrm.blaubot.android<span class="o">.</span>BlaubotFactory</span><span class="o">.</span>createBluetoothBlaubot(<span class="no">APP_UUID</span>);
+</pre></div>
 
 <p>On Android you can rely on the standard ethernet-based Blaubot options provided (see Quickstart Java) but you can also use the Bluetooth enabled Blaubot.
 Please note that you have to use a different Factory to create Blaubot instances optimized for the Android platform.</p>
