@@ -46,66 +46,66 @@ Blaubot takes care of device discovery and connection establishment with the goa
 
 <p>1) Obtain a Blaubot instance from a BlaubotFactory</p>
 
-<div class="highlight highlight-java"><pre><span class="c1">// Generate a UUID that is unique for your application</span>
-<span class="c1">// see http://www.famkruithof.net/uuid/uuidgen</span>
-<span class="k">final</span> <span class="kt">UUID</span> <span class="no">APP_UUID</span> <span class="o">=</span> <span class="no">UUID</span><span class="o">.</span>fromString(<span class="s2">"ec127529-2e9c-4046-a5a5-144feb30465f"</span>); 
-<span class="kt">Blaubot</span> blaubot <span class="o">=</span> <span class="kt">BlaubotAndroidFactory</span><span class="o">.</span>createEthernetBlaubot(<span class="no">APP_UUID</span>);</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-c">// Generate a UUID that is unique for your application</span>
+<span class="pl-c">// see http://www.famkruithof.net/uuid/uuidgen</span>
+<span class="pl-s">final</span> <span class="pl-stj">UUID</span> <span class="pl-c1">APP_UUID</span> <span class="pl-k">=</span> <span class="pl-c1">UUID</span><span class="pl-k">.</span>fromString(<span class="pl-s1"><span class="pl-pds">"</span>ec127529-2e9c-4046-a5a5-144feb30465f<span class="pl-pds">"</span></span>); 
+<span class="pl-stj">Blaubot</span> blaubot <span class="pl-k">=</span> <span class="pl-stj">BlaubotAndroidFactory</span><span class="pl-k">.</span>createEthernetBlaubot(<span class="pl-c1">APP_UUID</span>);</pre></div>
 
 <p>2) (optional) Register a ILifecycleListener to the Blaubot instance</p>
 
-<div class="highlight highlight-java"><pre>blaubot<span class="o">.</span>addLifecycleListener(<span class="k">new</span> <span class="kt">ILifecycleListener</span>() {
+<div class="highlight highlight-java"><pre>blaubot<span class="pl-k">.</span>addLifecycleListener(<span class="pl-k">new</span> <span class="pl-stj">ILifecycleListener</span>() {
 
-    <span class="kt">@Override</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onPrinceDeviceChanged</span>(<span class="kt">IBlaubotDevice</span> <span class="nv">oldPrince</span>, <span class="kt">IBlaubotDevice</span> <span class="nv">newPrince</span>) {
-        <span class="c1">// if the network's king goes down, the prince will rule over the remaining peasants</span>
+    <span class="pl-st">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">onPrinceDeviceChanged</span>(<span class="pl-stj">IBlaubotDevice</span> <span class="pl-v">oldPrince</span>, <span class="pl-stj">IBlaubotDevice</span> <span class="pl-v">newPrince</span>) {
+        <span class="pl-c">// if the network's king goes down, the prince will rule over the remaining peasants</span>
     }
 
-    <span class="kt">@Override</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onDisconnected</span>() {
-        <span class="c1">// THIS device disconnected from the network</span>
+    <span class="pl-st">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">onDisconnected</span>() {
+        <span class="pl-c">// THIS device disconnected from the network</span>
     }
 
-    <span class="kt">@Override</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onDeviceLeft</span>(<span class="kt">IBlaubotDevice</span> <span class="nv">blaubotDevice</span>) {
-      <span class="c1">// ANOTHER device disconnected from the network</span>
+    <span class="pl-st">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">onDeviceLeft</span>(<span class="pl-stj">IBlaubotDevice</span> <span class="pl-v">blaubotDevice</span>) {
+      <span class="pl-c">// ANOTHER device disconnected from the network</span>
     }
 
-    <span class="kt">@Override</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onDeviceJoined</span>(<span class="kt">IBlaubotDevice</span> <span class="nv">blaubotDevice</span>) {
-      <span class="c1">// ANOTHER device connected to the network THIS device is on</span>
+    <span class="pl-st">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">onDeviceJoined</span>(<span class="pl-stj">IBlaubotDevice</span> <span class="pl-v">blaubotDevice</span>) {
+      <span class="pl-c">// ANOTHER device connected to the network THIS device is on</span>
     }
 
-    <span class="kt">@Override</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onConnected</span>() {
-      <span class="c1">// THIS device connected to a network</span>
-      <span class="c1">// onDeviceJoined(...) calls will follow for each OTHER device that was already connected</span>
+    <span class="pl-st">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">onConnected</span>() {
+      <span class="pl-c">// THIS device connected to a network</span>
+      <span class="pl-c">// onDeviceJoined(...) calls will follow for each OTHER device that was already connected</span>
     }
 
 });</pre></div>
 
 <p>3) Start Blaubot</p>
 
-<div class="highlight highlight-java"><pre>blaubot<span class="o">.</span>startBlaubot();</pre></div>
+<div class="highlight highlight-java"><pre>blaubot<span class="pl-k">.</span>startBlaubot();</pre></div>
 
 <p>4) Create a Channel </p>
 
-<div class="highlight highlight-java"><pre><span class="k">final</span> <span class="kt">short</span> channelId <span class="o">=</span> (<span class="kt">short</span>) <span class="m">1</span>;
-<span class="k">final</span> <span class="kt">IChannel</span> channel <span class="o">=</span> blaubot<span class="o">.</span>createChannel(channelId);</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-s">final</span> <span class="pl-st">short</span> channelId <span class="pl-k">=</span> (<span class="pl-st">short</span>) <span class="pl-c1">1</span>;
+<span class="pl-s">final</span> <span class="pl-stj">IChannel</span> channel <span class="pl-k">=</span> blaubot<span class="pl-k">.</span>createChannel(channelId);</pre></div>
 
 <p>4.1) Send messages to all subscribers of this channel</p>
 
-<div class="highlight highlight-java"><pre>channel<span class="o">.</span>post(<span class="s2">"Hello world!"</span><span class="o">.</span>getBytes(<span class="kt">Charset</span><span class="o">.</span>forName(<span class="s2">"UTF-8"</span>)));</pre></div>
+<div class="highlight highlight-java"><pre>channel<span class="pl-k">.</span>post(<span class="pl-s1"><span class="pl-pds">"</span>Hello world!<span class="pl-pds">"</span></span><span class="pl-k">.</span>getBytes(<span class="pl-stj">Charset</span><span class="pl-k">.</span>forName(<span class="pl-s1"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>)));</pre></div>
 
 <p>4.2) Subscribe to the channel via channel.subsribe() to receive messages</p>
 
-<div class="highlight highlight-java"><pre>channel<span class="o">.</span>subscribe(<span class="k">new</span> <span class="kt">IMessageListener</span>() {
+<div class="highlight highlight-java"><pre>channel<span class="pl-k">.</span>subscribe(<span class="pl-k">new</span> <span class="pl-stj">IMessageListener</span>() {
 
-    <span class="kt">@Override</span>
-    <span class="k">public</span> <span class="kt">void</span> <span class="nf">onMessage</span>(<span class="kt">BlaubotMessage</span> <span class="nv">message</span>) {
-        <span class="c1">// we got a message - our payload is a byte array</span>
-        <span class="c1">// deserialize</span>
-        <span class="kt">String</span> msg <span class="o">=</span> <span class="k">new</span> <span class="kt">String</span>(message<span class="o">.</span>getPayload(), <span class="kt">Charset</span><span class="o">.</span>forName(<span class="s2">"UTF-8"</span>));
-        <span class="c1">// .. do something useful ..</span>
+    <span class="pl-st">@Override</span>
+    <span class="pl-s">public</span> <span class="pl-st">void</span> <span class="pl-en">onMessage</span>(<span class="pl-stj">BlaubotMessage</span> <span class="pl-v">message</span>) {
+        <span class="pl-c">// we got a message - our payload is a byte array</span>
+        <span class="pl-c">// deserialize</span>
+        <span class="pl-stj">String</span> msg <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-stj">String</span>(message<span class="pl-k">.</span>getPayload(), <span class="pl-stj">Charset</span><span class="pl-k">.</span>forName(<span class="pl-s1"><span class="pl-pds">"</span>UTF-8<span class="pl-pds">"</span></span>));
+        <span class="pl-c">// .. do something useful ..</span>
     }
 
 });</pre></div>
@@ -120,11 +120,11 @@ Blaubot takes care of device discovery and connection establishment with the goa
 <li>Create a Blaubot instance using de.hsrm.blaubot.core.BlaubotFactory</li>
 </ol>
 
-<div class="highlight highlight-java"><pre><span class="c1">// creates a Blaubot instance with a multicast beacon on the first found local interface</span>
-<span class="kt">de.hsrm.blaubot.core<span class="o">.</span>BlabotFactory</span><span class="o">.</span>createEthernetBlaubot(<span class="no">APP_UUID</span>);
+<div class="highlight highlight-java"><pre><span class="pl-c">// creates a Blaubot instance with a multicast beacon on the first found local interface</span>
+<span class="pl-stj">de.hsrm.blaubot.core<span class="pl-k">.</span>BlaubotFactory</span><span class="pl-k">.</span>createEthernetBlaubot(<span class="pl-c1">APP_UUID</span>);
 
-<span class="c1">// or create a Blaubot instance without multicast searching for a fixed set of devices by their ip addresses</span>
-<span class="kt">de.hsrm.blaubot.core<span class="o">.</span>BlaubotFactory</span><span class="o">.</span>createEthernetBlaubotWithFixedDevices(<span class="m">...</span>);</pre></div>
+<span class="pl-c">// or create a Blaubot instance without multicast searching for a fixed set of devices by their ip addresses</span>
+<span class="pl-stj">de.hsrm.blaubot.core<span class="pl-k">.</span>BlaubotFactory</span><span class="pl-k">.</span>createEthernetBlaubotWithFixedDevices(<span class="pl-c1">...</span>);</pre></div>
 
 <p>You can choose between a fixed set of devices to form net Blaubot network or to dynamically search and discover nearby running Blaubot instances via multicast from the Factory's methods. 
 If your targeted environment supports multicasts, this should be the easiest option for you to get your app working.</p>
@@ -137,10 +137,10 @@ If your targeted environment supports multicasts, this should be the easiest opt
 <li>Create a Blaubot instance using de.hsrm.blaubot.android.BlaubotFactory</li>
 </ol>
 
-<div class="highlight highlight-java"><pre><span class="c1">// you can use the same ethernet based isntances as for java but additionally:</span>
+<div class="highlight highlight-java"><pre><span class="pl-c">// you can use the same ethernet based isntances as for java but additionally:</span>
 
-<span class="c1">// creates a Blaubot instance using Android's Bluetooth API</span>
-<span class="kt">de.hsrm.blaubot.android<span class="o">.</span>BlaubotFactory</span><span class="o">.</span>createBluetoothBlaubot(<span class="no">APP_UUID</span>);
+<span class="pl-c">// creates a Blaubot instance using Android's Bluetooth API</span>
+<span class="pl-stj">de.hsrm.blaubot.android<span class="pl-k">.</span>BlaubotFactory</span><span class="pl-k">.</span>createBluetoothBlaubot(<span class="pl-c1">APP_UUID</span>);
 </pre></div>
 
 <p>On Android you can rely on the standard ethernet-based Blaubot options provided (see Quickstart Java) but you can also use the Bluetooth enabled Blaubot.
